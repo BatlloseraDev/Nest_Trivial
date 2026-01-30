@@ -4,6 +4,7 @@ import { TrivialModule } from './trivial/trivial.module';
 import { TrivialController } from './trivial/trivial.controller';
 import { TrivialService } from './trivial/trivial.service';
 import { UsersModule } from './users/users.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 
 
@@ -14,9 +15,9 @@ import { UsersModule } from './users/users.module';
            }),
            TrivialModule,
            UsersModule,
-           
+           MongooseModule.forRoot(`mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,)
           ],
-  controllers: [TrivialController],
-  providers: [TrivialService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
