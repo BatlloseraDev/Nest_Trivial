@@ -3,259 +3,38 @@ import { CreateTrivialDto } from './dto/create-trivial.dto';
 import { UpdateTrivialDto } from './dto/update-trivial.dto';
 import { Question, QuestionTried } from './entities/trivial.entity';
 import { get } from 'http';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
+import { Mode } from 'fs';
 
 @Injectable()
 export class TrivialService {
-  private questions: Question[] = [
-    // --- EL SEÑOR DE LOS ANILLOS ---
-    {
-      id: 1,
-      statement: '¿Cuál es el nombre del primer Ent que Merry y Pippin encuentran en Fangorn?',
-      options: [
-        { index: 0, text: 'Bárbol (Treebeard)' },
-        { index: 1, text: 'Ramaviva' },
-        { index: 2, text: 'Hojasombría' },
-        { index: 3, text: 'Zarcillo' },
-      ],
-      answerIndex: 0,
-    },
-    {
-      id: 2,
-      statement: '¿Quién es el actual portador de la espada Narsil antes de ser forjada de nuevo como Andúril?',
-      options: [
-        { index: 0, text: 'Elrond' },
-        { index: 1, text: 'Aragorn' },
-        { index: 2, text: 'Isildur' },
-        { index: 3, text: 'Denethor' },
-      ],
-      answerIndex: 1,
-    },
-    {
-      id: 3,
-      statement: '¿En qué edad del sol fue forjado el Anillo Único?',
-      options: [
-        { index: 0, text: 'Primera Edad' },
-        { index: 1, text: 'Segunda Edad' },
-        { index: 2, text: 'Tercera Edad' },
-        { index: 3, text: 'Cuarta Edad' },
-      ],
-      answerIndex: 1,
-    },
-    {
-      id: 4,
-      statement: '¿Cuál es el nombre original de Gollum antes de ser corrompido por el anillo?',
-      options: [
-        { index: 0, text: 'Déagol' },
-        { index: 1, text: 'Smeagol' },
-        { index: 2, text: 'Bandobras' },
-        { index: 3, text: 'Traherd' },
-      ],
-      answerIndex: 1,
-    },
 
-    // --- SKYRIM ---
-    {
-      id: 5,
-      statement: '¿Cómo se llama el líder de la Hermandad Oscura en el santuario de Falkreath?',
-      options: [
-        { index: 0, text: 'Ciceron' },
-        { index: 1, text: 'Astrid' },
-        { index: 2, text: 'Nazir' },
-        { index: 3, text: 'Babette' },
-      ],
-      answerIndex: 1,
-    },
-    {
-      id: 6,
-      statement: '¿Cuál es el grito (Shout) que se utiliza para despejar los cielos de tormentas?',
-      options: [
-        { index: 0, text: 'Fus Ro Dah' },
-        { index: 1, text: 'Lok Vah Koor' },
-        { index: 2, text: 'Yol Toor Shul' },
-        { index: 3, text: 'Strun Bah Qo' },
-      ],
-      answerIndex: 1,
-    },
-    {
-      id: 7,
-      statement: '¿A qué príncipe Daedra pertenece el artefacto "La Estrella de Azura"?',
-      options: [
-        { index: 0, text: 'Meridia' },
-        { index: 1, text: 'Azura' },
-        { index: 2, text: 'Nocturnal' },
-        { index: 3, text: 'Molag Bal' },
-      ],
-      answerIndex: 1,
-    },
-    {
-      id: 8,
-      statement: '¿Cuál es la capital de la comarca de "La Cuenca" (The Reach)?',
-      options: [
-        { index: 0, text: 'Morthal' },
-        { index: 1, text: 'Markarth' },
-        { index: 2, text: 'Riften' },
-        { index: 3, text: 'Lucero del Alba' },
-      ],
-      answerIndex: 1,
-    },
-
-    // --- ONE PIECE ---
-    {
-      id: 9,
-      statement: '¿Cuál es el nombre del primer barco de los Piratas del Sombrero de Paja?',
-      options: [
-        { index: 0, text: 'Thousand Sunny' },
-        { index: 1, text: 'Oro Jackson' },
-        { index: 2, text: 'Going Merry' },
-        { index: 3, text: 'Red Force' },
-      ],
-      answerIndex: 2,
-    },
-    {
-      id: 10,
-      statement: '¿Quién fue el mentor de Luffy que le entregó su sombrero de paja?',
-      options: [
-        { index: 0, text: 'Garp' },
-        { index: 1, text: 'Silvers Rayleigh' },
-        { index: 2, text: 'Shanks' },
-        { index: 3, text: 'Ace' },
-      ],
-      answerIndex: 2,
-    },
-    {
-      id: 11,
-      statement: '¿Qué fruta del diablo consumió Nico Robin?',
-      options: [
-        { index: 0, text: 'Hana Hana no Mi' },
-        { index: 1, text: 'Gomu Gomu no Mi' },
-        { index: 2, text: 'Yomi Yomi no Mi' },
-        { index: 3, text: 'Mero Mero no Mi' },
-      ],
-      answerIndex: 0,
-    },
-    {
-      id: 12,
-      statement: '¿Cómo se llama la isla donde se encuentra el One Piece?',
-      options: [
-        { index: 0, text: 'Raftel (Laugh Tale)' },
-        { index: 1, text: 'Skypiea' },
-        { index: 2, text: 'Marineford' },
-        { index: 3, text: 'Wano' },
-      ],
-      answerIndex: 0,
-    },
-
-    // --- COSMERE (BRANDON SANDERSON) ---
-    {
-      id: 13,
-      statement: '¿En "El Archivo de las Tormentas", cómo se llama la espada esquirlada de Dalinar Kholin?',
-      options: [
-        { index: 0, text: 'Juramentada (Oathbringer)' },
-        { index: 1, text: 'Canto de Trueno' },
-        { index: 2, text: 'Sangre Nocturna' },
-        { index: 3, text: 'Syl' },
-      ],
-      answerIndex: 0,
-    },
-    {
-      id: 14,
-      statement: '¿Cuál es el metal que permite a un Alomante quemar para ver el futuro a corto plazo?',
-      options: [
-        { index: 0, text: 'Peltre' },
-        { index: 1, text: 'Zinc' },
-        { index: 2, text: 'Atium' },
-        { index: 3, text: 'Acero' },
-      ],
-      answerIndex: 2,
-    },
-    {
-      id: 15,
-      statement: '¿Quién es el personaje que aparece en casi todos los libros del Cosmere haciendo cameos?',
-      options: [
-        { index: 0, text: 'Kelsier' },
-        { index: 1, text: 'Hoid' },
-        { index: 2, text: 'Sazed' },
-        { index: 3, text: 'Vasher' },
-      ],
-      answerIndex: 1,
-    },
-    {
-      id: 16,
-      statement: '¿Cómo se llama el planeta donde ocurren los eventos de "El Aliento de los Dioses"?',
-      options: [
-        { index: 0, text: 'Roshar' },
-        { index: 1, text: 'Scadrial' },
-        { index: 2, text: 'Nalthis' },
-        { index: 3, text: 'Sel' },
-      ],
-      answerIndex: 2,
-    },
-
-    // --- EL NOMBRE DEL VIENTO ---
-    {
-      id: 17,
-      statement: '¿Cuál es el verdadero nombre de la mujer que Kvothe persigue durante la historia?',
-      options: [
-        { index: 0, text: 'Fela' },
-        { index: 1, text: 'Auri' },
-        { index: 2, text: 'Denna' },
-        { index: 3, text: 'Mola' },
-      ],
-      answerIndex: 2,
-    },
-    {
-      id: 18,
-      statement: '¿Cómo se llama la posada que regenta Kvothe en el presente (el marco de la historia)?',
-      options: [
-        { index: 0, text: 'Roca de Guía' },
-        { index: 1, text: 'El Eolio' },
-        { index: 2, text: 'La Universidad' },
-        { index: 3, text: 'Ancla de Plata' },
-      ],
-      answerIndex: 0,
-    },
-    {
-      id: 19,
-      statement: '¿Qué instrumento musical toca Kvothe con maestría excepcional?',
-      options: [
-        { index: 0, text: 'Flauta de pan' },
-        { index: 1, text: 'Lira' },
-        { index: 2, text: 'Laúd' },
-        { index: 3, text: 'Arpa' },
-      ],
-      answerIndex: 2,
-    },
-    {
-      id: 20,
-      statement: '¿Quiénes son los seres misteriosos que asesinaron a la familia de Kvothe?',
-      options: [
-        { index: 0, text: 'Los Amyr' },
-        { index: 1, text: 'Los Chandrian' },
-        { index: 2, text: 'Los Fae' },
-        { index: 3, text: 'Los Scrael' },
-      ],
-      answerIndex: 1,
-    },
-  ];
 
   private questionsTrieds: QuestionTried[] = [];
 
   private score = 0;
-  private answeredCount =0;
+  private answeredCount = 0;
 
+  constructor(
+    @InjectModel(Question.name)
+    private readonly questionModel: Model<Question>) { };
 
-  getRandom(): Question{
-    if(this.questions.length === 0){
+  async getRandom() {
+    const randomQuestion = await this.questionModel.aggregate([
+      { $sample: { size: 1 } }
+    ]);
+
+    if (!randomQuestion || randomQuestion.length === 0) {
       throw new NotFoundException('No hay preguntas disponibles');
     }
-    const randomIndex = Math.floor(Math.random() * this.questions.length);
-    const randomQuestion = this.questions[randomIndex];
-    //this.questions.splice(randomIndex, 1);
-    return randomQuestion;
+
+    return randomQuestion[0];
   }
 
-  submitAnswer(questionId: number, answerIndex: number){
-    const question = this.questions.find((q) => q.id === questionId);
+  async submitAnswer(questionId: number, answerIndex: number) {
+    const question = await this.questionModel.findOne({ id: questionId });
+
     if (!question) {
       throw new NotFoundException('Pregunta no encontrada');
     }
@@ -265,19 +44,65 @@ export class TrivialService {
       this.score++;
     }
     this.answeredCount++;
-    this.questionsTrieds.push({id: question.id, id_q: questionId, res: answerIndex});
+    this.questionsTrieds.push({ id: Date.now(), id_q: questionId, res: answerIndex });
 
-
-    return {correct, correctOption: question.answerIndex, id: question.id}
+    return { 
+      correct, 
+      correctOption: question.answerIndex, 
+      id: question.id 
+    };
   }
 
-  getScore(){
-    return {score: this.score, answeredCount: this.answeredCount}
+  getScore() {
+    return { score: this.score, answeredCount: this.answeredCount };
   }
 
-  reset(){
+  reset() {
     this.score = 0;
     this.answeredCount = 0;
     this.questionsTrieds = [];
   }
-}
+
+
+
+
+
+    // getRandom(): Question{
+
+
+    //   if(this.questions.length === 0){
+    //     throw new NotFoundException('No hay preguntas disponibles');
+    //   }
+    //   const randomIndex = Math.floor(Math.random() * this.questions.length);
+    //   const randomQuestion = this.questions[randomIndex];
+    //   //this.questions.splice(randomIndex, 1);
+    //   return randomQuestion;
+    // }
+
+    // submitAnswer(questionId: number, answerIndex: number){
+    //   const question = this.questions.find((q) => q.id === questionId);
+    //   if (!question) {
+    //     throw new NotFoundException('Pregunta no encontrada');
+    //   }
+
+    //   const correct = question.answerIndex === answerIndex;
+    //   if (correct) {
+    //     this.score++;
+    //   }
+    //   this.answeredCount++;
+    //   this.questionsTrieds.push({ id: question.id, id_q: questionId, res: answerIndex });
+
+
+    //   return { correct, correctOption: question.answerIndex, id: question.id }
+    // }
+
+    // getScore(){
+    //   return { score: this.score, answeredCount: this.answeredCount }
+    // }
+
+    // reset(){
+    //   this.score = 0;
+    //   this.answeredCount = 0;
+    //   this.questionsTrieds = [];
+    // }
+  }
