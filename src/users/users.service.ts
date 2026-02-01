@@ -80,8 +80,19 @@ export class UsersService {
 
   async remove(id: number) {
     const userDeleted = await this.userModel.findByIdAndDelete(id);
-    if(!userDeleted) throw new NotFoundException(`El usuario con id ${id} no existe`);
-    return {message: `Usuario con ID ${id} eliminado exitosamente`};
+    if (!userDeleted) throw new NotFoundException(`El usuario con id ${id} no existe`);
+    return { message: `Usuario con ID ${id} eliminado exitosamente` };
+  }
+
+
+
+  async findEmail(email: string): Promise<User> {
+
+    const user = await this.userModel.findOne({ email });
+    if (!user) {
+      throw new NotFoundException(`El usuario con email ${email} no existe`);
+    }
+    return user;
   }
 
 
@@ -89,28 +100,23 @@ export class UsersService {
 
 
 
+  // create(createUserDto: CreateUserDto) {
+  //   return 'This action adds a new user';
+  // }
 
+  // findAll() {
+  //   return `This action returns all users`;
+  // }
 
+  // findOne(id: number) {
+  //   return `This action returns a #${id} user`;
+  // }
 
+  // update(id: number, updateUserDto: UpdateUserDto) {
+  //   return `This action updates a #${id} user`;
+  // }
 
-
-    // create(createUserDto: CreateUserDto) {
-    //   return 'This action adds a new user';
-    // }
-
-    // findAll() {
-    //   return `This action returns all users`;
-    // }
-
-    // findOne(id: number) {
-    //   return `This action returns a #${id} user`;
-    // }
-
-    // update(id: number, updateUserDto: UpdateUserDto) {
-    //   return `This action updates a #${id} user`;
-    // }
-
-    // remove(id: number) {
-    //   return `This action removes a #${id} user`;
-    // }
-  }
+  // remove(id: number) {
+  //   return `This action removes a #${id} user`;
+  // }
+}
