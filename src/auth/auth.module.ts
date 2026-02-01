@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './jwt/jwt.strategy';
@@ -6,6 +6,10 @@ import { RolesDecorator } from './roles/roles.decorator';
 import { UsersModule } from 'src/users/users.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
+
+
+console.log('UsersModule:', UsersModule);
+console.log('PassportModule:', PassportModule);
 
 @Module({
   imports:[
@@ -16,8 +20,8 @@ import { JwtModule } from '@nestjs/jwt';
       signOptions: { expiresIn: '1h' },
     }),
   ],
-  providers: [AuthService, JwtStrategy, RolesDecorator],
   controllers: [AuthController],
+  providers: [AuthService, JwtStrategy, RolesDecorator],
   exports: [AuthService,JwtModule],
 
 })

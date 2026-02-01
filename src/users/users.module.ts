@@ -1,13 +1,15 @@
-import { Module } from '@nestjs/common';
+import { Module,} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './entities/user.entity';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   controllers: [UsersController],
   providers: [UsersService],
   imports: [
+    JwtModule,
     MongooseModule.forFeature([
       {
         name: User.name, //Nombre de la clase del modelo: 'Usuario'.
