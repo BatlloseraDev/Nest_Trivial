@@ -1,6 +1,6 @@
 
 // API en Nest (puerto 3000)
-const API_BASE = 'http://localhost:9090';
+const API_BASE = 'http://localhost:9090/api';
 
 let currentQuestion = null;
 
@@ -59,4 +59,54 @@ async function loadScore() {
   } catch (err) {
     document.getElementById('status').innerText = `Error: ${err.message}`;
   }
+}
+
+
+// ====== USUARIOS ======
+async function crearUsuario() {
+  const id = document.getElementById("usuario-id").value;
+  const nombre = document.getElementById("usuario-nombre").value;
+  const edad = document.getElementById("usuario-edad").value;
+  const email = document.getElementById("usuario-email").value;
+  const password = document.getElementById("usuario-password").value;
+
+
+  const res = await fetch(`${API_BASE}/users`, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({id: Number(id), name: nombre, age: Number(edad), email, password, roles:['user']})
+  });
+
+  alert(await res.json());
+  listarUsuarios();
+}
+
+async function listarUsuarios() {
+  const res = await fetch(`${API_BASE}/users`);
+  const data = await res.json();
+  document.getElementById("usuarios-listado").textContent = JSON.stringify(data, null, 2);
+}
+
+async function actualizarUsuario() {
+  const uid = document.getElementById("usuario-uid").value;
+  const nombre = document.getElementById("usuario-nombre-upd").value;
+  const edad = document.getElementById("usuario-edad-upd").value;
+
+  const res = await fetch(`${API_BASE}/users/${uid}`, {
+    method: "PUT",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({name: nombre, age: edad ? Number(edad) : undefined})
+  });
+
+  alert(await res.json());
+  listarUsuarios();
+}
+
+async function eliminarUsuario() {
+  const uid = document.getElementById("usuario-del-id").value;
+  const res = await fetch(`${API_BASE}/users/${uid}`, { method: "DELETE" });
+  alert(await res.json());
+  listarUsuarios();
+
+  
 }

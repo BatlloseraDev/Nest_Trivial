@@ -1,10 +1,11 @@
-
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="utf-8" />
   <title>Trivial Friki</title>
 </head>
+
 <body>
   <h1>Trivial Friki (Cliente 5500)</h1>
 
@@ -19,7 +20,43 @@
   <hr />
   <p>Aciertos: <span id="score">0</span> / <span id="answered">0</span></p>
 
+  <h2>Usuarios</h2>
+
+  <div>
+    <h3>Crear Usuario</h3>
+    <input type="number" id="usuario-id" placeholder="ID">
+    <input type="text" id="usuario-nombre" placeholder="Nombre">
+    <input type="number" id="usuario-edad" placeholder="Edad">
+    <input type="text" id="usuario-email" placeholder="Email">
+    <input type="text" id="usuario-password" placeholder="Password">
+    <button onclick="crearUsuario()">Crear</button>
+  </div>
+
+  <div>
+    <h3>Actualizar Usuario</h3>
+    <input type="text" id="usuario-uid" placeholder="MongoID del usuario">
+    <input type="text" id="usuario-nombre-upd" placeholder="Nombre">
+    <input type="number" id="usuario-edad-upd" placeholder="Edad">
+    <button onclick="actualizarUsuario()">Actualizar</button>
+  </div>
+
+  <div>
+    <h3>Eliminar Usuario</h3>
+    <input type="text" id="usuario-del-id" placeholder="MongoID del usuario">
+    <button onclick="eliminarUsuario()">Eliminar</button>
+  </div>
+
+  <div>
+    <h3>Listar Usuarios</h3>
+    <button onclick="listarUsuarios()">Listar Todos</button>
+    <pre id="usuarios-listado"></pre>
+  </div>
+
+  <hr>
+
+
   <script src="app.js"></script>
 
 </body>
+
 </html>
