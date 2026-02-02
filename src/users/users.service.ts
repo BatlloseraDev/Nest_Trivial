@@ -22,10 +22,15 @@ export class UsersService {
         ...createUserDto,
         roles: createUserDto.roles.map((role) => ({ role })),
       };
+      //lo hardcodeo por si llega otro valor distinto
+      createUserDto.score = 0;
+      createUserDto.answeredCount = 0;
+
 
       const newUser = await this.userModel.create(userToCreate);
       return newUser;
     } catch (error) {
+      console.log(error);
       if (error.code === 11000) {
         throw new BadRequestException(`${createUserDto.name} ya existe`);
       }

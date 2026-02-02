@@ -1,4 +1,4 @@
-import { IsString, IsInt, Min, IsPositive } from 'class-validator';
+import { IsString, IsInt, Min, IsPositive, IsArray } from 'class-validator';
 
 export class CreateUserDto {
 
@@ -19,7 +19,19 @@ export class CreateUserDto {
     @IsString()
     password: string;
 
+    @IsInt()
+    @IsPositive()
+    score: number;
+
+    @IsInt()
+    @IsPositive()
+    answeredCount: number;
+
+
+    @IsArray()
     @IsString({ each: true })
     roles: string[];
+
+    
 
 }

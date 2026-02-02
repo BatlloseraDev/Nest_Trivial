@@ -63,18 +63,46 @@ async function loadScore() {
 
 
 // ====== USUARIOS ======
+async function login() {
+  const email = document.getElementById("usuario-email-login").value;
+  const password = document.getElementById("usuario-password-login").value;
+
+  try {
+    const res = await fetchJSON(`${API_BASE}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+    alert('Login exitoso');
+    console.log(res);
+    //guardar el token en localStorage
+    localStorage.setItem('token', res.access_token);
+
+
+  } catch (err) {
+    document.getElementById('status').innerText = `Error: ${err.message}`;
+  }
+}
+
+
+
+
+
 async function crearUsuario() {
   const id = document.getElementById("usuario-id").value;
   const nombre = document.getElementById("usuario-nombre").value;
   const edad = document.getElementById("usuario-edad").value;
   const email = document.getElementById("usuario-email").value;
   const password = document.getElementById("usuario-password").value;
+  const score = 0;
+  const answeredCount = 0;
 
 
+  //porporcionar el token a traves del header
   const res = await fetch(`${API_BASE}/users`, {
     method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({id: Number(id), name: nombre, age: Number(edad), email, password, roles:['user']})
+    headers: {"Content-Type": "application/json", "Authorization": `Bearer ${localStorage.getItem('token')}`},
+    body: JSON.stringify({id: Number(id), name: nombre, age: Number(edad), email, password, roles:['user'], score, answeredCount})
   });
 
   alert(await res.json());
