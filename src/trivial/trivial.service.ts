@@ -6,6 +6,7 @@ import { get } from 'http';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Mode } from 'fs';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class TrivialService {
@@ -13,12 +14,14 @@ export class TrivialService {
 
   private questionsTrieds: QuestionTried[] = [];
 
-  private score = 0;
-  private answeredCount = 0;
+  // private score = 0;
+  // private answeredCount = 0;
 
   constructor(
     @InjectModel(Question.name)
-    private readonly questionModel: Model<Question>) { };
+    private readonly questionModel: Model<Question>,
+    private readonly usersService: UsersService
+  ) { };
 
   async getRandom() {
     const randomQuestion = await this.questionModel.aggregate([
@@ -32,7 +35,7 @@ export class TrivialService {
     return randomQuestion[0];
   }
 
-  async submitAnswer(questionId: number, answerIndex: number) {
+  async submitAnswer(userId: number, questionId: number, answerIndex: number) {
     const question = await this.questionModel.findOne({ id: questionId });
 
     if (!question) {
@@ -40,11 +43,12 @@ export class TrivialService {
     }
 
     const correct = question.answerIndex === answerIndex;
-    if (correct) {
-      this.score++;
-    }
-    this.answeredCount++;
+    await this.usersService.updateStats(userId, correct);
+
+    
     this.questionsTrieds.push({ id: Date.now(), id_q: questionId, res: answerIndex });
+
+
 
     return { 
       correct, 
@@ -53,13 +57,19 @@ export class TrivialService {
     };
   }
 
-  getScore() {
-    return { score: this.score, answeredCount: this.answeredCount };
+  async getScore(userId: number) {
+
+    const user = await this.usersService.findOne(userId);
+    if (!user) {
+      throw new NotFoundException(`El usuario con id ${userId} no existe`);
+    }
+
+    return { score: user.score, answeredCount: user.answeredCount };
   }
 
   reset() {
-    this.score = 0;
-    this.answeredCount = 0;
+    // this.score = 0;
+    // this.answeredCount = 0;
     this.questionsTrieds = [];
   }
 

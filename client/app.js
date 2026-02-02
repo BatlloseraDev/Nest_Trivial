@@ -38,9 +38,15 @@ async function loadRandom() {
 async function answerQuestion(optionIndex) {
   if (!currentQuestion) return;
   try {
+    const token = localStorage.getItem('token');
+    if(!token){
+      alert('No hay usuario loggeado. Por favor inicia sesión primero.');
+      return;
+    }
+
     const res = await fetchJSON(`${API_BASE}/trivial/answer`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${token}` },
       body: JSON.stringify({ questionId: currentQuestion.id, answerIndex: optionIndex }),
     });
 
@@ -53,7 +59,9 @@ async function answerQuestion(optionIndex) {
 
 async function loadScore() {
   try {
-    const s = await fetchJSON(`${API_BASE}/trivial/score`);
+    const s = await fetchJSON(`${API_BASE}/trivial/score`, {
+      headers: { "Authorization": `Bearer ${localStorage.getItem('token')}` }
+    });
     document.getElementById('score').innerText = s.score;
     document.getElementById('answered').innerText = s.answeredCount;
   } catch (err) {
@@ -78,6 +86,16 @@ async function login() {
     //guardar el token en localStorage
     localStorage.setItem('token', res.access_token);
 
+    if(res.user){
+      localStorage.setItem('user', JSON.stringify(res.user));
+
+      const scoreElement = document.getElementById('score');
+      const answeredElement = document.getElementById('answered');
+      
+      scoreElement.innerText = res.user.score;
+      answeredElement.innerText = res.user.answeredCount;
+    }
+
 
   } catch (err) {
     document.getElementById('status').innerText = `Error: ${err.message}`;
@@ -97,11 +115,16 @@ async function crearUsuario() {
   const score = 0;
   const answeredCount = 0;
 
+  const token = localStorage.getItem('token');
+  if (!token) {
+    alert("No hay token guardado. Por favor inicia sesión primero.");
+    return;
+  }
 
   //porporcionar el token a traves del header
   const res = await fetch(`${API_BASE}/users`, {
     method: "POST",
-    headers: {"Content-Type": "application/json", "Authorization": `Bearer ${localStorage.getItem('token')}`},
+    headers: {"Content-Type": "application/json", "Authorization": `Bearer ${token}`},
     body: JSON.stringify({id: Number(id), name: nombre, age: Number(edad), email, password, roles:['user'], score, answeredCount})
   });
 
@@ -110,7 +133,9 @@ async function crearUsuario() {
 }
 
 async function listarUsuarios() {
-  const res = await fetch(`${API_BASE}/users`);
+  const res = await fetch(`${API_BASE}/users`, {
+    headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}
+  });
   const data = await res.json();
   document.getElementById("usuarios-listado").textContent = JSON.stringify(data, null, 2);
 }
@@ -122,7 +147,7 @@ async function actualizarUsuario() {
 
   const res = await fetch(`${API_BASE}/users/${uid}`, {
     method: "PUT",
-    headers: {"Content-Type": "application/json"},
+    headers: {"Content-Type": "application/json", "Authorization": `Bearer ${localStorage.getItem('token')}`},
     body: JSON.stringify({name: nombre, age: edad ? Number(edad) : undefined})
   });
 
@@ -132,7 +157,9 @@ async function actualizarUsuario() {
 
 async function eliminarUsuario() {
   const uid = document.getElementById("usuario-del-id").value;
-  const res = await fetch(`${API_BASE}/users/${uid}`, { method: "DELETE" });
+  const res = await fetch(`${API_BASE}/users/${uid}`, { method: "DELETE", 
+    headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}
+   });
   alert(await res.json());
   listarUsuarios();
 

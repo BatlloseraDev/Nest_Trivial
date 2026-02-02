@@ -20,11 +20,11 @@ export class CreateUserDto {
     password: string;
 
     @IsInt()
-    @IsPositive()
+    @Min(0)
     score: number;
 
     @IsInt()
-    @IsPositive()
+    @Min(0)
     answeredCount: number;
 
 

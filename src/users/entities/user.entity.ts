@@ -23,6 +23,12 @@ export class User extends Document{
     @Prop({required: true})
     roles: roles[];
 
+    @Prop({ default: 0 })
+    score: number;
+
+    @Prop({ default: 0 })
+    answeredCount: number;
+
 
 }
 

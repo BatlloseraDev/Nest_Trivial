@@ -49,12 +49,13 @@ export class UsersService {
 
   async findOne(id: number): Promise<User> {
     try {
-      const user = await this.userModel.findById(id);
+      const user = await this.userModel.findOne({id});
       if (!user) {
         throw new NotFoundException(`El usuario con id ${id} no existe`);
       }
       return user;
     } catch (error) {
+      console.log(error);
       throw new InternalServerErrorException(`Error al obtener el usuario`)
     }
   }
@@ -101,7 +102,32 @@ export class UsersService {
   }
 
 
+  async updateStats(id: number, correct: boolean){ 
+    const scoreInc = correct ? 1 : 0;
+    const answeredCountInc = 1;
+    try {
+      const userUpdated = await this.userModel.findOneAndUpdate(
+        { id },
+        { 
+          $inc: { 
+            score: scoreInc, 
+            answeredCount: answeredCountInc 
+          } 
+        },
+        { new: true }
+      );
 
+      if (!userUpdated) {
+        throw new NotFoundException(`El usuario con id ${id} no existe`);
+      }
+
+      return userUpdated;
+    } catch (error) {
+      if (error instanceof NotFoundException) throw error;
+      throw new InternalServerErrorException(`Error al actualizar las estadísticas del usuario`);
+    }
+    
+  }
 
 
 
