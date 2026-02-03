@@ -4,6 +4,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './entities/user.entity';
 import { Model } from 'mongoose';
+import * as bcrypt from 'bcrypt';
+import { use } from 'passport';
 
 @Injectable()
 export class UsersService {
@@ -18,13 +20,18 @@ export class UsersService {
       createUserDto.name = createUserDto.name.charAt(0).toUpperCase() + createUserDto.name.slice(1);
       createUserDto.email = createUserDto.email.toLowerCase();
 
+      const {password, ...userData} = createUserDto;
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+
       const userToCreate = {
         ...createUserDto,
+        password: hashedPassword,
         roles: createUserDto.roles.map((role) => ({ role })),
+        score: 0,
+        answeredCount: 0,
       };
-      //lo hardcodeo por si llega otro valor distinto
-      createUserDto.score = 0;
-      createUserDto.answeredCount = 0;
 
 
       const newUser = await this.userModel.create(userToCreate);

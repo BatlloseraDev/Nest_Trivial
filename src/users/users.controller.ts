@@ -7,6 +7,8 @@ import { RolesGuard } from 'src/auth/roles/roles.guard';
 
 
 
+
+
 export const Roles= (...roles: string[]) => SetMetadata('roles', roles);
 @Controller('users')
 @UseGuards(JwtGuard, RolesGuard)
@@ -22,7 +24,6 @@ export class UsersController {
   @Roles('admin')
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createUserDto: CreateUserDto) {
-    
     return this.usersService.create(createUserDto);
   }
 
