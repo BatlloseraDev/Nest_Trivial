@@ -1,0 +1,190 @@
+
+  /* === Reset y Base === */
+  :root {
+    --primary: #5469d4;      /* Azul moderno */
+    --primary-hover: #3c4b9a;
+    --bg-color: #f7f9fc;     /* Gris muy claro de fondo */
+    --card-bg: #ffffff;
+    --text-main: #333;
+    --text-muted: #666;
+    --danger: #e0234e;       /* Rojo para errores/eliminar */
+    --success: #28a745;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    line-height: 1.5;
+  }
+
+  /* === Tipografía === */
+  h1 {
+    text-align: center;
+    color: var(--danger); /* Guiño al color de NestJS */
+    margin-bottom: 40px;
+    font-size: 2.5rem;
+    font-weight: 800;
+  }
+
+  h2 {
+    color: var(--text-main);
+    border-bottom: 2px solid #eaeaea;
+    padding-bottom: 10px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+  }
+
+  h3 {
+    margin-top: 0;
+    color: var(--primary);
+    font-size: 1.2rem;
+  }
+
+  hr {
+    border: 0;
+    height: 1px;
+    background: #e1e4e8;
+    margin: 40px 0;
+  }
+
+  /* === Elementos de Juego (Trivial) === */
+  /* Área de la pregunta */
+  #statement {
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    font-size: 1.25rem;
+    text-align: center;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+    border: 1px solid #e1e4e8;
+  }
+
+  /* Contenedor de opciones */
+  #options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  /* Botones de opciones específicos */
+  #options button {
+    background: var(--card-bg);
+    color: var(--text-main);
+    border: 2px solid var(--primary);
+    padding: 15px;
+    font-size: 1rem;
+    height: 100%;
+    transition: all 0.2s ease;
+  }
+
+  #options button:hover {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(84, 105, 212, 0.3);
+  }
+
+  /* Feedback de estado y Score */
+  #status {
+    text-align: center;
+    font-weight: bold;
+    min-height: 24px;
+    color: var(--text-muted);
+  }
+
+  p {
+    font-size: 1.1rem;
+    text-align: center;
+  }
+  
+  span#score, span#answered {
+    font-weight: bold;
+    color: var(--primary);
+    font-size: 1.4rem;
+  }
+
+  /* === Formularios y Gestión de Usuarios === */
+  /* Truco CSS: Como el HTML usa <div> para agrupar los formularios sin clases,
+     usamos el selector 'body > div' para dar estilo de tarjeta a esos bloques,
+     pero excluimos el div de #options.
+  */
+  body > div:not(#options) {
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    margin-bottom: 20px;
+    border: 1px solid #f0f0f0;
+    transition: transform 0.2s;
+  }
+
+  body > div:not(#options):hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+  }
+
+  /* Inputs */
+  input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box; /* Asegura que el padding no rompa el ancho */
+    transition: border 0.2s;
+  }
+
+  input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(84, 105, 212, 0.15);
+  }
+
+  /* Botones Generales */
+  button {
+    background-color: var(--primary);
+    color: white;
+    padding: 12px 20px;
+    margin: 10px 5px 10px 0;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background 0.3s;
+  }
+
+  button:hover {
+    background-color: var(--primary-hover);
+  }
+
+  /* Botones específicos por contexto (usando selectores de atributo o posición) */
+  /* Botón Eliminar (rojo) */
+  div:nth-of-type(4) button { 
+    background-color: var(--danger); 
+  }
+  div:nth-of-type(4) button:hover { 
+    background-color: #b01a3a; 
+  }
+
+  /* Área de JSON (Listado) */
+  #usuarios-listado {
+    background: #1e1e1e;
+    color: #a5d6ff;
+    padding: 15px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.9rem;
+    max-height: 400px;
+  }
