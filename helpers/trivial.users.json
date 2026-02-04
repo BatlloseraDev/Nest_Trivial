@@ -1,0 +1,52 @@
+[{
+  "_id": {
+    "$oid": "697fb2d4eb0fc1bea5efb4d4"
+  },
+  "id": 1,
+  "name": "admin",
+  "age": 19,
+  "email": "admin@example.com",
+  "password": "$2b$10$3lFBNCe1eSUomewJ5fNYluX..yly5MyUDzfceHuTwwLf14KX67V1i",
+  "roles": [
+    {
+      "role": "user"
+    },
+    {
+      "role": "admin"
+    }
+  ],
+  "answeredCount": 14,
+  "score": 10
+},
+{
+  "_id": {
+    "$oid": "698091fc5d51c3342d95f13f"
+  },
+  "id": 2,
+  "name": "Admin2",
+  "age": 30,
+  "email": "admin2@example.com",
+  "password": "$2b$10$.yNSuiIQl73lAUPCk6dmHunaXmat1uT7yaXQX/VtMfLY8uaYewTym",
+  "roles": [
+    {
+      "role": "admin"
+    }
+  ],
+  "answeredCount": 0,
+  "score": 0
+},
+{
+  "_id": {
+    "$oid": "6980d7f664b5fb0c3c905c0a"
+  },
+  "id": 3,
+  "name": "User3",
+  "age": 10,
+  "email": "user@user.com",
+  "password": "$2b$10$qRwmQ1b9vfj9q4XYNVc/8e9Z7EAClKIS4H39fPZUZYjRGqesyOZOi",
+  "roles": [
+    {
+      "role": "user"
+    }
+  ]
+}]

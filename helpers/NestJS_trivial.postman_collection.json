@@ -1,0 +1,86 @@
+{
+  "info": {
+    "_postman_id": "28dc5db0-98f6-4428-a313-2404499349b1",
+    "name": "NestJS_trivial",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "48599462"
+  },
+  "item": [
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\":\"admin@example.com\",\r\n    \"password\":\"admin123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://[::1]:9090/api/auth/login",
+          "protocol": "http",
+          "host": [
+            "[::1]"
+          ],
+          "port": "9090",
+          "path": [
+            "api",
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CrearUser",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwic3ViIjoxLCJyb2xlcyI6W3sicm9sZSI6InVzZXIifSx7InJvbGUiOiJhZG1pbiJ9XSwiaWF0IjoxNzY5OTg1MjgwLCJleHAiOjE3Njk5ODg4ODB9.F-3oEsCD5BummqJGO5Dnj2EHu6y_od3VzltanpElBJo",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"id\":\"2\",\r\n    \"name\": \"Admin2\",\r\n    \"age\": \"30\",\r\n    \"email\":\"admin2@example.com\",\r\n    \"password\":\"admin123\",\r\n    \"roles\": \"admin\"\r\n\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://[::1]:9090/api/users",
+          "protocol": "http",
+          "host": [
+            "[::1]"
+          ],
+          "port": "9090",
+          "path": [
+            "api",
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "New Request",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    }
+  ]
+}
